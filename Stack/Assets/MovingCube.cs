@@ -2,11 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class MovingCube : MonoBehaviour
 {
     public static MovingCube CurrentCube { get; private set; }
     public static MovingCube LastCube { get; private set; }
+    public MoveDirection MoveDirection { get; set; }
 
     [SerializeField]
     private float moveSpeed = 1f;
@@ -28,6 +31,13 @@ public class MovingCube : MonoBehaviour
     {
         moveSpeed = 0f;
         float breakZ = transform.position.z - LastCube.transform.position.z;
+
+        if(Math.Abs(breakZ) >= LastCube.transform.localScale.z)
+        {
+            LastCube = null;
+            CurrentCube = null;
+            SceneManager.LoadScene(0);
+        }
 
         float direction = breakZ > 0 ? 1f : -1f; 
 
@@ -60,6 +70,9 @@ public class MovingCube : MonoBehaviour
 
     void Update()
     {
-        transform.position += transform.forward * Time.deltaTime * moveSpeed;
+        if (MoveDirection == MoveDirection.Z)
+            transform.position += transform.forward * Time.deltaTime * moveSpeed;
+        else
+            transform.position += transform.right * Time.deltaTime * moveSpeed;
     }
 }

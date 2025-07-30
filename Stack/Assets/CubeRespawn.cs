@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CubeRespawn : MonoBehaviour
 {
     [SerializeField]
     private MovingCube cubePrefab;
+    [SerializeField]
+    private MoveDirection moveDirection;
     public void SpawnCube()
     {
         var cube = Instantiate(cubePrefab);
@@ -18,5 +21,12 @@ public class CubeRespawn : MonoBehaviour
         {
             cube.transform.position = transform.position;
         }
+        cube.MoveDirection = moveDirection;
     }
+}
+
+public enum MoveDirection
+{
+    X,
+    Z
 }
